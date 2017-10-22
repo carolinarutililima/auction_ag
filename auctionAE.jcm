@@ -1,13 +1,19 @@
 mas auctionAE {
-
-	agent marie_curie	: auctioneerAE.asl
+    agent marie_curie	: auctioneerAE.asl
+	
     agent socrates      : participantAE.asl
     agent kant          : participantAE.asl
-    agent atistoteles   : participantAE.asl
+    agent aristoteles   : participantAE.asl
     agent platao        : participantAE.asl
     agent heraclito     : participantAE.asl
-	agent hannah_arendt : participantAE.asl
- 
+    agent hannah_arendt : participantAE.asl
+	
+     workspace market_place {
+        artifact auction1 : auctionAE.AuctionArtifact() {
+            focused-by: marie_curie, socrates, kant, aristoteles, platao, heraclito, hannah_arendt
+        }
+    }
+    
     asl-path: src/agt
               src/agt/inc
 }
