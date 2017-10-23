@@ -1,9 +1,8 @@
-//!start.
-!do_action("a1", "product(diamond_ring)").
+!do_auction("a1", "product(diamond_ring)").
 
 +!do_auction(Id,P) <- // creates a scheme to coordinate the auction
 	.concat("sch_",Id,SchName);
-    makeArtifact(SchName, "ora4mas.nopl.SchemeBoard",["src/org/auction-os.xml", doAuction], SchArtId);
+    makeArtifact(SchName, "ora4mas.nopl.SchemeBoard",["src/org/auctionos.xml", doAuction], SchArtId);
     debug(inspector_gui(on))[artifact_id(SchArtId)];
     setArgumentValue(auction,"Id",Id)[artifact_id(SchArtId)];
     setArgumentValue(auction,"Service",P)[artifact_id(SchArtId)];
@@ -16,10 +15,11 @@
 	?goalArgument(Sch,auction,"Id",Id);
     ?goalArgument(Sch,auction,"Service",S);
     .print("Start scheme ",Sch," for ",S);
-	makeArtifact(a1, "auction.AuctionArtifact", [], ArtId);
-    .print("Auction artifact created for ",product(diamond_ring));
-    focus(ArtId);
-    .broadcast(achieve,focus(a1));
+	makeArtifact(Id, "auctionAEO.AuctionArtifact", [], ArtId);
+    .print("Auction artifact created for ",S);
+     Sch::focus(ArtId);
+ //   .broadcast(achieve,focus(a1));
+    Sch::start(S);
     .wait(500);
     !setOffer.
     
@@ -33,6 +33,12 @@
 	}.
 	
 +!setOffer.
+
+
++oblUnfulfilled( obligation(Ag,_,done(Sch,bid,Ag),_ ) )[artifact_id(AId)]  // it is the case that a bid was not achieved
+   <- .print("Participant ",Ag," didn't bid on time! S/he will be placed in a blacklist");
+       // TODO: implement an black list artifact
+       admCommand("goalSatisfied(bid)")[artifact_id(AId)].
 
 { include("$jacamoJar/templates/common-cartago.asl") }
 { include("$jacamoJar/templates/common-moise.asl") }
