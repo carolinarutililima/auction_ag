@@ -1,10 +1,13 @@
 my_price(2000+math.random*200).
 
-+!focus(A) <- 
-	lookupArtifact(A,ToolId);
-    focus(ToolId);
-    +present;
-    getIn.
+
++!bid[scheme(Sch)]
+   <- ?goalArgument(Sch,auction,"Id",Id);
+      lookupArtifact(Id,ArtId);
+      focus(ArtId);
+      +present;
+      .wait(200);  
+       getIn.
 
 +minOffer(N) : my_price(MP) & present <-
 	if (N > MP) {
